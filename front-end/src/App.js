@@ -45,6 +45,7 @@ function App() {
   const [startPoint, setStart] = useState(center)
   const [endPoint, setEnd] = useState(center)
   const [Tracker, setstacker] = useState(center)
+  const [data, setDtata] = useState(null)
   const points = [
     { 
       coords: [[39.93212, 116.42719],[39.90577, 116.42916]],
@@ -77,6 +78,12 @@ function App() {
     color: 'red'
     }
   ]
+
+  function fetchRoute() {
+    fetch('http://10.23.215.103:5000/api')
+        .then(response => response.json())
+        .then(data => setDtata(data));
+  }
 
 
   function Startmarker() {
@@ -154,25 +161,50 @@ function App() {
   return (
     <div className="">
 
-      <div className="navbar bg-base-100">
+      <input type="checkbox" id="my-modal-5" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box max-w-5xl">
+          <h3 className="font-bold text-lg">Welcome to GeoCell !</h3>
+          <p className="py-4 text-justify">
+            A machine learning based platform made to compute the best way to go from a localisation to an other taking in concideration trafic conjestion on the roads
+            <br/>
+            <br/>
+            The WebApp is now available for the city of Beijing, China, and the dataset used to train the model is from 10,300+ taxis that collectet a total of 17,662,984 GPS points.
+            <br/>
+            <br/>
+            To use it just move the markers on the map to set the  <nobr className='text-red-500'>Start</nobr>  and  <nobr className='text-green-500'>End</nobr> point of your trip, then click on the "Compute" button to get the best route.
+            <br/>
+            <br/>
+            To see the details of your trip click on the drawer icon on the top left and for more information about the project click on the "Github" button on the top right.
+            <br/>
+            <br/>
+            <b>Have Fun !</b>
+          
+          </p>
+
+          <div className="modal-action">
+            <label htmlFor="my-modal-5" className="btn">Yay!</label>
+          </div>
+        </div>
+      </div>
+
+      <div className="navbar bg-primary">
         <div className="navbar-start">
           <label htmlFor="my-drawer" className="btn btn-ghost btn-circle drawer-button">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="white"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
           </label>
         </div>
         <div className="navbar-center">
-          <a className="btn btn-ghost normal-case text-xl">GeoCell</a>
+          <label className="btn btn-ghost normal-case text-xl modal-button text-white" htmlFor="my-modal-5">
+            <img className="w-8 h-8 rounded-full mr-2" src="https://cdn.discordapp.com/attachments/1015252420277846046/1032275581364084827/github-icon_2.png" alt="avatar" />
+            GeoCell
+            </label>
         </div>
         <div className="navbar-end">
-          <button className="btn btn-ghost btn-circle">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-          </button>
-          <button className="btn btn-ghost btn-circle">
-            <div className="indicator">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-              <span className="badge badge-xs badge-primary indicator-item"></span>
-            </div>
-          </button>
+          <a className="btn btn-ghost btn-circle" href='https://github.com/Senshiben-efrei/traffic_congestion' target='none'>
+            <img className="w-8 h-8 rounded-full" src="https://cdn.discordapp.com/attachments/1015252420277846046/1032275501944946699/github-icon_1.png" alt="avatar" />
+          </a>
+          
         </div>
       </div>
 
@@ -182,47 +214,26 @@ function App() {
         <div className="drawer-content flex flex-col">
           {/* <!-- Page content here --> */}
 
+          <div className="mockup-window border bg-base-300 w-4/5 h-3/4 self-center mt-9">
+            <div className="flex justify-center bg-base-200">
+              <MapContainer center={center} zoom={11} scrollWheelZoom={true} className='rounded-lg'>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=XUsL1AmkUL4FXM0DB8aZ" //vttps://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png        
+                  />
 
-          <h1 className='self-center text-4xl font-bold pt-2'>App</h1>
-          <div className=' p-5 self-center' >
-            <MapContainer center={center} zoom={11} scrollWheelZoom={true} className='rounded-lg'>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://api.maptiler.com/maps/darkmatter/{z}/{x}/{y}.png?key=XUsL1AmkUL4FXM0DB8aZ" //vttps://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png        
-                />
+                {data && data.map((point, index) => (
+                  <Polyline key={index} pathOptions={{ color : point.color}} positions={point.coords} />
+                ))}
+
+
+                <Marker position={startPoint} />
 
                 
-              {point2.map((point, index) => (
-                <Polyline key={index} pathOptions={{ color : point.color}} positions={point.coords} />
-              ))}
-
-
-              <Marker position={startPoint} />
-
-              
-              <Startmarker />
-              <Endmarker />
-              
-            </MapContainer>
-          </div>
-
-          <div className="flex w-3/5 self-center">
-            <div className="grid h-auto flex-grow card bg-base-300 rounded-box place-items-center">
-              <div className="flex flex-col w-36">
-                <div className="grid h-20 card bg-base-300 rounded-box place-items-center">Start point</div> 
-                <div className="divider"></div> 
-                <div className="grid h-20 card bg-base-300 rounded-box place-items-center">{startPoint['lat'] + ' , ' + startPoint['lng']}</div>
-              </div>
-            </div>
-
-            <div className="divider divider-horizontal">►</div>
-
-            <div className="grid h-auti flex-grow card bg-base-300 rounded-box place-items-center">
-              <div className="flex flex-col w-36">
-                <div className="grid h-20 card bg-base-300 rounded-box place-items-center">End point</div> 
-                <div className="divider"></div> 
-                <div className="grid h-20 card bg-base-300 rounded-box place-items-center">{endPoint['lat'] + ' , ' + endPoint['lng']}</div>
-              </div>
+                <Startmarker />
+                <Endmarker />
+                
+              </MapContainer>
             </div>
           </div>
 
@@ -232,8 +243,17 @@ function App() {
           <label htmlFor="my-drawer" className="drawer-overlay"></label>
           <ul className="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
             {/* <!-- Sidebar content here --> */}
-            <li><a>Sidebar Item 1</a></li>
-            <li><a>Sidebar Item 2</a></li>
+
+            <div className="flex flex-col w-full border-opacity-50">
+              <div className="divider">Departure localisation</div>
+              <div className="grid h-20 card bg-base-300 rounded-box place-items-center text-center">{startPoint['lat'] + ' , ' + startPoint['lng']}</div>
+              <div className="divider">Arrival localisation</div>
+              <div className="grid h-20 card bg-base-300 rounded-box place-items-center text-center">{endPoint['lat'] + ' , ' + endPoint['lng']}</div>
+              <div className="divider">Trip time</div>
+              <div className="grid h-20 card bg-base-300 rounded-box place-items-center">XX : XX</div>
+            </div>
+
+            <button className="btn btn-primary" onClick={fetchRoute}>Compute</button>
             
           </ul>
         </div>
