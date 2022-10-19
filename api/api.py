@@ -37,5 +37,5 @@ def api():
     return jsonify(array)
     
 if __name__ == '__main__':
-    app.run(host="10.23.215.103")
+    app.run(threaded=True, host='0.0.0.0', port=5000)
 
