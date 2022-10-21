@@ -652,6 +652,7 @@ function App() {
     console.log(requestOptions['body'])
 
     const response = await fetch('http://127.0.0.1:5000/machine_learning', requestOptions);
+    setDtata(await response.json());
     const text = await response.text();
     console.log(text);
   }
