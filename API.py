@@ -81,7 +81,7 @@ def getPoints(pickup, dropoff, df):
         
         results.append(final_df)
 
-    return results, route['route'], route['duration']
+    return results, route['route'], route['duration'], route['distance']
 
 def getPortions(df, route):
     portions = []
@@ -142,6 +142,27 @@ def getPortions(df, route):
         'route': basic
     }
     
+
+def getDuration(portions, initial_duration):
+    # count the number of red, orange, and green portions
+    red = 0
+    orange = 0
+    green = 0
+    for portion in portions:
+        if portion['color'] == 'red':
+            red += 1
+        elif portion['color'] == 'orange':
+            orange += 1
+        else:
+            green += 1
+
+    print(red, orange, green)
+
+    # calculate the duration
+    duration = initial_duration * (1.5*red + 1.25*orange)
+
+
+    return duration
 
 # df = pd.read_csv('https://drive.google.com/uc?export=download&id='+'https://drive.google.com/file/d/1qcBW7V81AdyQ58kUgwUjiBmjqzcJLN34/view?usp=sharing'.split('/')[-2], header=None, names=['date time', 'longitude', 'latitude', 'label'])
 # points = getPoints((39.933556, 116.372817), (39.841633, 116.478400), df)
@@ -212,8 +233,15 @@ def machine_learning():
         points = getPoints((float(pickup_lat), float(pickup_lon)), (float(dropoff_lat), float(dropoff_lon)), df)
 
         portion_results = []
-        for i in range(len(points[0])):
-            portion_results.append(getPortions(points[0][i], points[1][i]))
+        for i in range(len(points[2])):
+            portion = getPortions(points[0][i], points[1][i])
+            duration = getDuration(portion['portions'], points[2][i])
+            portion_results.append({
+                'result': portion,
+                'duration': points[2][i],
+                'corrected_duration': duration,
+                'distance': points[3][i]
+            })
         return jsonify(portion_results)
     # 39.90772518863834 116.39751663173872 39.95380284673872 116.46232507838539
 
