@@ -793,16 +793,16 @@ function App() {
                   url="https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=XUsL1AmkUL4FXM0DB8aZ" //vttps://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png        
                   />
 
-                {data && data[0]['route'].map((point, index) => (
-                  <Polyline key={index} pathOptions={{ color : 'blue'}} positions={[[point['start']['latitude'],point['start']['longitude']],[point['end']['latitude'],point['end']['longitude']]]} />
+                {data && data.map((point, index) => (
+                  <Polyline key={index} pathOptions={{ color : 'blue'}} positions={[[point[0]['route']['start']['latitude'],point[0]['route']['start']['longitude']],[point[0]['route']['end']['latitude'],point[0]['route']['end']['longitude']]]} />
                 ))}
 
                 {/* {data && data['portions'].map((point, index) => (
                   <Polyline key={index} pathOptions={{ color : point['color']}} positions={[[point['start']['latitude'],point['start']['longitude']],[point['end']['latitude'],point['end']['longitude']]]} />
                 ))} */}
 
-                {data && data[0]['portions'].map((point, index) => (
-                  <Polyline key={index} pathOptions={{ color : point['color']}} positions={[[point['start']['latitude'],point['start']['longitude']],[point['end']['latitude'],point['end']['longitude']]]} />
+                {data && data.map((point, index) => (
+                  <Polyline key={index} pathOptions={{ color : point[0]['portions']['color']}} positions={[[point[0]['portions']['start']['latitude'],point[0]['portions']['start']['longitude']],[point[0]['portions']['end']['latitude'],point[0]['portions']['end']['longitude']]]} />
                 ))}
 
 
