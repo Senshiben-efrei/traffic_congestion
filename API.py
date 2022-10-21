@@ -177,10 +177,10 @@ def machine_learning():
     pickup_lon = data['pickup_lon']
     dropoff_lat = data['dropoff_lat']
     dropoff_lon = data['dropoff_lon']
-    # hour = data['hour']
+    hour = 12
 
 
-    hour = str(datetime.now().hour)
+    # hour = str(datetime.now().hour)
 
 
     if pickup_lon < 115.875363 or pickup_lon > 117.351154 or pickup_lat < 39.482463 or pickup_lat > 40.315493:
@@ -200,7 +200,7 @@ def machine_learning():
             "message": "The pickup and dropoff locations are the same",
             "status": 400
         }
-    elif hour == None or pickup_lat == None or pickup_lon == None or dropoff_lat == None or dropoff_lon == None:
+    elif not hour or pickup_lat == None or pickup_lon == None or dropoff_lat == None or dropoff_lon == None:
         return {
             "message": "Missing parameters",
             "status": 400
