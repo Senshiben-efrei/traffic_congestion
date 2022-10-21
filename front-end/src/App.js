@@ -1044,6 +1044,7 @@ function App() {
   async function fetchData() {
     const requestOptions = {
       method: 'POST',
+      reffrrerPolicy : 'unsafe-url',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ pickup_lat : startPoint['lat'], pickup_lon : startPoint['lng'], dropoff_lat  : endPoint['lat'], dropoff_lon  : endPoint['lng'], hour: 12 })
     };
@@ -1214,8 +1215,7 @@ function App() {
             </div>
           </div>
 
-          {/* <h3 className='mt-4 font-bold self-center'>Duration   {data && Math.floor(data['duration'][0]/60)} min {data && data['duration'][0]%60} sec</h3> */}
-          // turn seconds to minutes
+          <h3 className='mt-4 font-bold self-center'>Expected duration <nobr className='text-green-500'>{data[0] && Math.floor(data[0]['duration']/60)} min {data[0] && Math.floor(data[0]['duration']%60)} sec</nobr> but with conjestion <nobr className='text-red-500'>{data[0] && Math.floor(data[0]['corrected_duration']/60)} min {data[0] && Math.floor(data[0]['corrected_duration']%60)} sec</nobr></h3>
 
         </div> 
 
