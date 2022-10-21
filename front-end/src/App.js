@@ -42,47 +42,603 @@ function App() {
   })
 
   const center = {lat: 39.92026958978369, lng: 116.39740004226684}
-  const [startPoint, setStart] = useState(center)
-  const [endPoint, setEnd] = useState(center)
+  const [startPoint, setStart] = useState({lat: 39.93132681455846, lng: 116.31431579589845})
+  const [endPoint, setEnd] = useState({lat: 39.868905071098865, lng: 116.43585205078126})
   const [Tracker, setstacker] = useState(center)
   const [data, setDtata] = useState(null)
-  const points = [
-    { 
-      coords: [[39.93212, 116.42719],[39.90577, 116.42916]],
-      color: 'red'
-    },
-    { 
-      coords: [[39.93312, 116.42819],[39.90677, 116.43016]],
-      color: 'blue'
-    }
-  ]
-  const point2 = [
+
+  const datato = [
     {
-    coords: [[39.93345, 116.37282],[39.93151, 116.37382]],
-    color: 'red'
+      "portions": [
+        {
+          "portion": 0,
+          "start": {
+            "latitude": 39.933062,
+            "longitude": 116.37302
+          },
+          "end": {
+            "latitude": 39.931898000000004,
+            "longitude": 116.37362
+          },
+          "color": "green"
+        },
+        {
+          "portion": 1,
+          "start": {
+            "latitude": 39.931632,
+            "longitude": 116.38449399999999
+          },
+          "end": {
+            "latitude": 39.931998,
+            "longitude": 116.416516
+          },
+          "color": "red"
+        },
+        {
+          "portion": 2,
+          "start": {
+            "latitude": 39.926849999999995,
+            "longitude": 116.427584
+          },
+          "end": {
+            "latitude": 39.91104,
+            "longitude": 116.428766
+          },
+          "color": "red"
+        },
+        {
+          "portion": 3,
+          "start": {
+            "latitude": 39.906014,
+            "longitude": 116.42913399999999
+          },
+          "end": {
+            "latitude": 39.906746,
+            "longitude": 116.429056
+          },
+          "color": "green"
+        },
+        {
+          "portion": 4,
+          "start": {
+            "latitude": 39.907014000000004,
+            "longitude": 116.429322
+          },
+          "end": {
+            "latitude": 39.907086,
+            "longitude": 116.430198
+          },
+          "color": "green"
+        },
+        {
+          "portion": 5,
+          "start": {
+            "latitude": 39.907050000000005,
+            "longitude": 116.44037200000001
+          },
+          "end": {
+            "latitude": 39.90687,
+            "longitude": 116.470018
+          },
+          "color": "red"
+        },
+        {
+          "portion": 6,
+          "start": {
+            "latitude": 39.90663,
+            "longitude": 116.480362
+          },
+          "end": {
+            "latitude": 39.90609,
+            "longitude": 116.481748
+          },
+          "color": "green"
+        },
+        {
+          "portion": 7,
+          "start": {
+            "latitude": 39.905282,
+            "longitude": 116.482502
+          },
+          "end": {
+            "latitude": 39.903397999999996,
+            "longitude": 116.483378
+          },
+          "color": "orange"
+        },
+        {
+          "portion": 8,
+          "start": {
+            "latitude": 39.897348,
+            "longitude": 116.48364000000001
+          },
+          "end": {
+            "latitude": 39.881082,
+            "longitude": 116.48355
+          },
+          "color": "green"
+        },
+        {
+          "portion": 9,
+          "start": {
+            "latitude": 39.869966000000005,
+            "longitude": 116.482504
+          },
+          "end": {
+            "latitude": 39.852883999999996,
+            "longitude": 116.479456
+          },
+          "color": "red"
+        },
+        {
+          "portion": 10,
+          "start": {
+            "latitude": 39.846316,
+            "longitude": 116.479348
+          },
+          "end": {
+            "latitude": 39.843694,
+            "longitude": 116.482072
+          },
+          "color": "orange"
+        },
+        {
+          "portion": 11,
+          "start": {
+            "latitude": 39.842864000000006,
+            "longitude": 116.481928
+          },
+          "end": {
+            "latitude": 39.842996,
+            "longitude": 116.478772
+          },
+          "color": "green"
+        },
+        {
+          "portion": 12,
+          "start": {
+            "latitude": 39.842762,
+            "longitude": 116.47767
+          },
+          "end": {
+            "latitude": 39.841928,
+            "longitude": 116.47752
+          },
+          "color": "green"
+        }
+      ],
+      "route": [
+        {
+          "start": {
+            "latitude": 39.93345,
+            "longitude": 116.37282
+          },
+          "end": {
+            "latitude": 39.93151,
+            "longitude": 116.37382
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.93151,
+            "longitude": 116.37382
+          },
+          "end": {
+            "latitude": 39.93212,
+            "longitude": 116.42719
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.93212,
+            "longitude": 116.42719
+          },
+          "end": {
+            "latitude": 39.90577,
+            "longitude": 116.42916
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.90577,
+            "longitude": 116.42916
+          },
+          "end": {
+            "latitude": 39.90699,
+            "longitude": 116.42903
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.90699,
+            "longitude": 116.42903
+          },
+          "end": {
+            "latitude": 39.90711,
+            "longitude": 116.43049
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.90711,
+            "longitude": 116.43049
+          },
+          "end": {
+            "latitude": 39.90681,
+            "longitude": 116.4799
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.90681,
+            "longitude": 116.4799
+          },
+          "end": {
+            "latitude": 39.90591,
+            "longitude": 116.48221
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.90591,
+            "longitude": 116.48221
+          },
+          "end": {
+            "latitude": 39.90277,
+            "longitude": 116.48367
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.90277,
+            "longitude": 116.48367
+          },
+          "end": {
+            "latitude": 39.87566,
+            "longitude": 116.48352
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.87566,
+            "longitude": 116.48352
+          },
+          "end": {
+            "latitude": 39.84719,
+            "longitude": 116.47844
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.84719,
+            "longitude": 116.47844
+          },
+          "end": {
+            "latitude": 39.84282,
+            "longitude": 116.48298
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.84282,
+            "longitude": 116.48298
+          },
+          "end": {
+            "latitude": 39.84304,
+            "longitude": 116.47772
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.84304,
+            "longitude": 116.47772
+          },
+          "end": {
+            "latitude": 39.84165,
+            "longitude": 116.47747
+          }
+        }
+      ]
     },
     {
-    coords: [[39.93151, 116.37382],[39.93212, 116.42719]],
-    color: 'orange'
-    },
-    {
-    coords: [[39.93212, 116.42719],[39.90577, 116.42916]],
-    color: 'blue'
-    },
-    {
-    coords: [[39.90577, 116.42916],[39.90699, 116.42903]],
-    color: 'green'
-    },
-    {
-    coords: [[39.90699, 116.42903],[39.90711, 116.43049]],
-    color: 'red'
+      "portions": [
+        {
+          "portion": 0,
+          "start": {
+            "latitude": 39.933062,
+            "longitude": 116.37302
+          },
+          "end": {
+            "latitude": 39.931898000000004,
+            "longitude": 116.37362
+          },
+          "color": "green"
+        },
+        {
+          "portion": 1,
+          "start": {
+            "latitude": 39.93164,
+            "longitude": 116.38123399999999
+          },
+          "end": {
+            "latitude": 39.932030000000005,
+            "longitude": 116.403476
+          },
+          "color": "red"
+        },
+        {
+          "portion": 2,
+          "start": {
+            "latitude": 39.923158,
+            "longitude": 116.411254
+          },
+          "end": {
+            "latitude": 39.896152,
+            "longitude": 116.412346
+          },
+          "color": "red"
+        },
+        {
+          "portion": 3,
+          "start": {
+            "latitude": 39.886345999999996,
+            "longitude": 116.413064
+          },
+          "end": {
+            "latitude": 39.883934,
+            "longitude": 116.414126
+          },
+          "color": "orange"
+        },
+        {
+          "portion": 4,
+          "start": {
+            "latitude": 39.877664,
+            "longitude": 116.414738
+          },
+          "end": {
+            "latitude": 39.861266,
+            "longitude": 116.41551199999999
+          },
+          "color": "red"
+        },
+        {
+          "portion": 5,
+          "start": {
+            "latitude": 39.85614,
+            "longitude": 116.42074799999999
+          },
+          "end": {
+            "latitude": 39.85716,
+            "longitude": 116.435682
+          },
+          "color": "orange"
+        },
+        {
+          "portion": 6,
+          "start": {
+            "latitude": 39.858012,
+            "longitude": 116.441946
+          },
+          "end": {
+            "latitude": 39.859548,
+            "longitude": 116.445804
+          },
+          "color": "orange"
+        },
+        {
+          "portion": 7,
+          "start": {
+            "latitude": 39.860057999999995,
+            "longitude": 116.447612
+          },
+          "end": {
+            "latitude": 39.860052,
+            "longitude": 116.449178
+          },
+          "color": "green"
+        },
+        {
+          "portion": 8,
+          "start": {
+            "latitude": 39.858272,
+            "longitude": 116.45199600000001
+          },
+          "end": {
+            "latitude": 39.852938,
+            "longitude": 116.458884
+          },
+          "color": "green"
+        },
+        {
+          "portion": 9,
+          "start": {
+            "latitude": 39.848294,
+            "longitude": 116.464258
+          },
+          "end": {
+            "latitude": 39.839695999999996,
+            "longitude": 116.473492
+          },
+          "color": "orange"
+        },
+        {
+          "portion": 10,
+          "start": {
+            "latitude": 39.83643,
+            "longitude": 116.475816
+          },
+          "end": {
+            "latitude": 39.835229999999996,
+            "longitude": 116.47355400000001
+          },
+          "color": "green"
+        },
+        {
+          "portion": 11,
+          "start": {
+            "latitude": 39.835584,
+            "longitude": 116.474002
+          },
+          "end": {
+            "latitude": 39.837846,
+            "longitude": 116.477608
+          },
+          "color": "green"
+        },
+        {
+          "portion": 12,
+          "start": {
+            "latitude": 39.83921,
+            "longitude": 116.47854199999999
+          },
+          "end": {
+            "latitude": 39.84104,
+            "longitude": 116.477738
+          },
+          "color": "green"
+        }
+      ],
+      "route": [
+        {
+          "start": {
+            "latitude": 39.93345,
+            "longitude": 116.37282
+          },
+          "end": {
+            "latitude": 39.93151,
+            "longitude": 116.37382
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.93151,
+            "longitude": 116.37382
+          },
+          "end": {
+            "latitude": 39.93216,
+            "longitude": 116.41089
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.93216,
+            "longitude": 116.41089
+          },
+          "end": {
+            "latitude": 39.88715,
+            "longitude": 116.41271
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.88715,
+            "longitude": 116.41271
+          },
+          "end": {
+            "latitude": 39.88313,
+            "longitude": 116.41448
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.88313,
+            "longitude": 116.41448
+          },
+          "end": {
+            "latitude": 39.8558,
+            "longitude": 116.41577
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.8558,
+            "longitude": 116.41577
+          },
+          "end": {
+            "latitude": 39.8575,
+            "longitude": 116.44066
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.8575,
+            "longitude": 116.44066
+          },
+          "end": {
+            "latitude": 39.86006,
+            "longitude": 116.44709
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.86006,
+            "longitude": 116.44709
+          },
+          "end": {
+            "latitude": 39.86005,
+            "longitude": 116.4497
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.86005,
+            "longitude": 116.4497
+          },
+          "end": {
+            "latitude": 39.85116,
+            "longitude": 116.46118
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.85116,
+            "longitude": 116.46118
+          },
+          "end": {
+            "latitude": 39.83683,
+            "longitude": 116.47657
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.83683,
+            "longitude": 116.47657
+          },
+          "end": {
+            "latitude": 39.83483,
+            "longitude": 116.4728
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.83483,
+            "longitude": 116.4728
+          },
+          "end": {
+            "latitude": 39.8386,
+            "longitude": 116.47881
+          }
+        },
+        {
+          "start": {
+            "latitude": 39.8386,
+            "longitude": 116.47881
+          },
+          "end": {
+            "latitude": 39.84165,
+            "longitude": 116.47747
+          }
+        }
+      ]
     }
   ]
 
   function fetchRoute() {
-    fetch('http://0.0.0.0:5000/api')
+    fetch('http://127.0.0.1:5000/api')
         .then(response => response.json())
-        .then(data => setDtata(data));
+        .then(data => {console.log(data)
+          setDtata(data)});
   }
 
   // create a async function to fetch data from the API
@@ -236,8 +792,16 @@ function App() {
                   url="https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=XUsL1AmkUL4FXM0DB8aZ" //vttps://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png        
                   />
 
-                {data && data.map((point, index) => (
-                  <Polyline key={index} pathOptions={{ color : point.color}} positions={point.coords} />
+                {data && data[0]['route'].map((point, index) => (
+                  <Polyline key={index} pathOptions={{ color : 'blue'}} positions={[[point['start']['latitude'],point['start']['longitude']],[point['end']['latitude'],point['end']['longitude']]]} />
+                ))}
+
+                {/* {data && data['portions'].map((point, index) => (
+                  <Polyline key={index} pathOptions={{ color : point['color']}} positions={[[point['start']['latitude'],point['start']['longitude']],[point['end']['latitude'],point['end']['longitude']]]} />
+                ))} */}
+
+                {data && data[0]['portions'].map((point, index) => (
+                  <Polyline key={index} pathOptions={{ color : point['color']}} positions={[[point['start']['latitude'],point['start']['longitude']],[point['end']['latitude'],point['end']['longitude']]]} />
                 ))}
 
 
@@ -250,6 +814,9 @@ function App() {
               </MapContainer>
             </div>
           </div>
+
+          <h3 className='mt-4 font-bold self-center'>Duration   {data && Math.floor(data['duration'][0]/60)} min {data && data['duration'][0]%60} sec</h3>
+          // turn seconds to minutes
 
         </div> 
 
