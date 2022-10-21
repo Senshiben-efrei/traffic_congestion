@@ -35,7 +35,21 @@ def api():
     }
   ]
     return jsonify(array)
+
+# create a route to post 3 variables to the api and return the result
+@app.route('/post', methods=['POST'])
+def api_post():
+    #get the data from tthe body
+    data = request.get_json()
+    #get the variables from the data
+    x = data['pickup']
+    y = data['dropoff']
+    t = data['time']
+    #calculate the result
+    result = x + y + t
+    #return the result
+    return jsonify(result)
     
 if __name__ == '__main__':
-    app.run(threaded=True, host='0.0.0.0', port=5000)
+    app.run(threaded=True, host='127.0.0.1', port=5000)
 

@@ -80,11 +80,25 @@ function App() {
   ]
 
   function fetchRoute() {
-    fetch('http://10.23.215.103:5000/api')
+    fetch('http://0.0.0.0:5000/api')
         .then(response => response.json())
         .then(data => setDtata(data));
   }
 
+  // create a async function to fetch data from the API
+  async function fetchData() {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pickup_lat : startPoint['lat'], pickup_lon : startPoint['lng'], dropoff_lat  : endPoint['lat'], dropoff_lon  : endPoint['lng'], hour: 12 })
+    };
+
+    console.log(requestOptions['body'])
+
+    const response = await fetch('http://127.0.0.1:5000/machine_learning', requestOptions);
+    const text = await response.text();
+    console.log(text);
+  }
 
   function Startmarker() {
     const [draggable, setDraggable] = useState(true)
@@ -253,7 +267,7 @@ function App() {
               <div className="grid h-20 card bg-base-300 rounded-box place-items-center">XX : XX</div>
             </div>
 
-            <button className="btn btn-primary" onClick={fetchRoute}>Compute</button>
+            <button className="btn btn-primary" onClick={fetchData}>Compute</button>
             
           </ul>
         </div>
