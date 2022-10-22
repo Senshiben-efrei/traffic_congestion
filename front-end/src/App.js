@@ -44,7 +44,8 @@ function App() {
   const center = {lat: 39.92026958978369, lng: 116.39740004226684}
   const [startPoint, setStart] = useState({lat: 39.93132681455846, lng: 116.31431579589845})
   const [endPoint, setEnd] = useState({lat: 39.868905071098865, lng: 116.43585205078126})
-  const [Tracker, setstacker] = useState(center)
+  const [charging, setCharging] = useState(false)
+  const [option, setOption] = useState(1)
   const [data, setDtata] = useState([
     {
       "corrected_duration": 10762.875,
@@ -1050,9 +1051,11 @@ function App() {
     };
 
     console.log(requestOptions['body'])
-
+    setCharging(true)
     const response = await fetch('https://geocell.one//machine_learning', requestOptions);
     setDtata(await response.json());
+    setCharging(false)
+    setOption(0)
   }
 
 
@@ -1128,8 +1131,40 @@ function App() {
     )
   }
 
+  const [theme, setTheme] = useState('emrald')
+
+  function changeTheme() {
+    if (theme === 'emrald') {
+      setTheme('halloween')
+    } 
+    if (theme === 'halloween') {
+      setTheme('emrald')
+    }
+  }
+
   return (
-    <div className="">
+    <div data-theme={theme} className='pb-10'>
+
+      <div className="navbar bg-primary sticky top-0 z-50">
+        <div className="navbar-start">
+          <label htmlFor="my-drawer" className="btn btn-ghost btn-circle drawer-button">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="white"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+          </label>
+        </div>
+        <div className="navbar-center">
+          <label className="btn btn-ghost normal-case text-xl modal-button text-white" htmlFor="my-modal-5">
+            <img className="w-8 h-8 rounded-full mr-2" src="https://cdn.discordapp.com/attachments/1015252420277846046/1032275581364084827/github-icon_2.png" alt="avatar" />
+            GeoCell
+            </label>
+        </div>
+        <div className="navbar-end">
+          <input type="checkbox" className="toggle toggle-sm" onChange={changeTheme} />
+          <a className="btn btn-ghost btn-circle" href='https://github.com/Senshiben-efrei/traffic_congestion' target='none'>
+            <img className="w-8 h-8 rounded-full" src="https://cdn.discordapp.com/attachments/1015252420277846046/1032275501944946699/github-icon_1.png" alt="avatar" />
+          </a>
+          
+        </div>
+      </div>
 
       <input type="checkbox" id="my-modal-5" className="modal-toggle" />
       <div className="modal">
@@ -1158,25 +1193,6 @@ function App() {
         </div>
       </div>
 
-      <div className="navbar bg-primary">
-        <div className="navbar-start">
-          <label htmlFor="my-drawer" className="btn btn-ghost btn-circle drawer-button">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="white"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
-          </label>
-        </div>
-        <div className="navbar-center">
-          <label className="btn btn-ghost normal-case text-xl modal-button text-white" htmlFor="my-modal-5">
-            <img className="w-8 h-8 rounded-full mr-2" src="https://cdn.discordapp.com/attachments/1015252420277846046/1032275581364084827/github-icon_2.png" alt="avatar" />
-            GeoCell
-            </label>
-        </div>
-        <div className="navbar-end">
-          <a className="btn btn-ghost btn-circle" href='https://github.com/Senshiben-efrei/traffic_congestion' target='none'>
-            <img className="w-8 h-8 rounded-full" src="https://cdn.discordapp.com/attachments/1015252420277846046/1032275501944946699/github-icon_1.png" alt="avatar" />
-          </a>
-          
-        </div>
-      </div>
 
       <div className="drawer">
         <input id="my-drawer" type="checkbox" className="drawer-toggle" />
@@ -1192,15 +1208,15 @@ function App() {
                   url="https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=XUsL1AmkUL4FXM0DB8aZ" //vttps://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png        
                   />
 
-                {data[0]['result']['route'] && data[0]['result']['route'].map((point, index) => (
-                  <Polyline key={index} pathOptions={{ color : 'blue'}} positions={[[point['start']['latitude'],point['start']['longitude']],[point['end']['latitude'],point['end']['longitude']]]} />
+                {data[option]['result']['route'] && data[option]['result']['route'].map((point, index) => (
+                  <Polyline key={index} pathOptions={{ color : 'green '}} positions={[[point['start']['latitude'],point['start']['longitude']],[point['end']['latitude'],point['end']['longitude']]]} />
                 ))}
 
                 {/* {data && data['portions'].map((point, index) => (
                   <Polyline key={index} pathOptions={{ color : point['color']}} positions={[[point['start']['latitude'],point['start']['longitude']],[point['end']['latitude'],point['end']['longitude']]]} />
                 ))} */}
 
-                {data[0]['result']['portions'] && data[0]['result']['portions'].map((point, index) => (
+                {data[option]['result']['portions'] && data[option]['result']['portions'].map((point, index) => (
                   <Polyline key={index} pathOptions={{ color : point['color']}} positions={[[point['start']['latitude'],point['start']['longitude']],[point['end']['latitude'],point['end']['longitude']]]} />
                 ))}
 
@@ -1215,8 +1231,26 @@ function App() {
             </div>
           </div>
 
-          <h3 className='mt-4 font-bold self-center'>Expected duration <nobr className='text-green-500'>{data[0] && Math.floor(data[0]['duration']/60)} min {data[0] && Math.floor(data[0]['duration']%60)} sec</nobr> but with conjestion <nobr className='text-red-500'>{data[0] && Math.floor(data[0]['corrected_duration']/60)} min {data[0] && Math.floor(data[0]['corrected_duration']%60)} sec</nobr></h3>
+          <h3 className='mt-4 text-center font-bold px-4 self-center'>Expected duration <nobr className='text-green-500'>{data[option] && Math.floor(data[option]['duration']/60)} min {data[option] && Math.floor(data[option]['duration']%60)} sec</nobr> but with conjestion <nobr className='text-red-500'>{data[option] && Math.floor(data[option]['corrected_duration']/60)} min {data[0] && Math.floor(data[option]['corrected_duration']%60)} sec</nobr></h3>
 
+          <button className="btn btn-primary w-28 self-center mt-5" onClick={fetchData} >Compute</button>
+
+          <div className=' flex flex-row justify-center'>
+            
+            <div className="form-control w-28 self-center mt-5">
+              <label className="label cursor-pointer">
+                <span className="label-text font-bold ml-3">Ride Now!</span> 
+                <input type="checkbox" className="checkbox checkbox-sm" />
+              </label>
+            </div>
+
+            <label className="text-gray-500 text-lg font-bold mx-6 self-center mt-5">or</label>
+
+            <input type="number" min="0" max="23" id="visitors" className=" w-11 self-center mt-5 py-3 pl-3 bg-slate-200 rounded-md" placeholder="12" required></input>
+            <label className="text-gray-500 text-lg font-bold mx-2 self-center mt-5">:</label>
+            <input type="number" min="0" max="59" id="visitors" className=" w-11 self-center mt-5 py-3 pl-3 bg-slate-200 rounded-md" placeholder="00" required></input>
+          </div>
+                  
         </div> 
 
         <div className="drawer-side">
@@ -1226,17 +1260,30 @@ function App() {
 
             <div className="flex flex-col w-full border-opacity-50">
               <div className="divider">Departure localisation</div>
-              <div className="grid h-20 card bg-base-300 rounded-box place-items-center text-center">{startPoint['lat'] + ' , ' + startPoint['lng']}</div>
+              <div className="grid h-20 card bg-base-200 rounded-box place-items-center text-center">{startPoint['lat'] + ' , ' + startPoint['lng']}</div>
               <div className="divider">Arrival localisation</div>
-              <div className="grid h-20 card bg-base-300 rounded-box place-items-center text-center">{endPoint['lat'] + ' , ' + endPoint['lng']}</div>
+              <div className="grid h-20 card bg-base-200 rounded-box place-items-center text-center">{endPoint['lat'] + ' , ' + endPoint['lng']}</div>
               <div className="divider">Trip time</div>
-              <div className="grid h-20 card bg-base-300 rounded-box place-items-center">XX : XX</div>
+              <div className="grid h-20 card bg-base-200 rounded-box place-items-center">XX : XX</div>
+              <div className="divider">Options</div>
+              <div className="dropdown dropdown-end self-center">
+                <label tabIndex={0} className="btn m-1">Option 1 / {data.length}</label>
+                <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                  {data && data.map((point, index) => (
+                    <li key={index}><a onClick={() => setOption(index)}>option {index + 1}</a></li>
+                  ))}
+                </ul>
+              </div>
+              
             </div>
 
-            <button className="btn btn-primary" onClick={fetchData}>Compute</button>
             
           </ul>
         </div>
+      </div>
+
+      <div className={`${charging ? 'visible' : 'invisible'} w-full h-[111%] bg-black absolute top-0 left-0 opacity-80 flex justify-center items-center animate-pulse`}>
+        <img className="w-28 h-28 rounded-full mr-2 animate-spin" src="https://cdn.discordapp.com/attachments/1015252420277846046/1032275581364084827/github-icon_2.png" alt="avatar" />
       </div>
 
     </div>
