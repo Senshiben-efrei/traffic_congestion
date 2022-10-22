@@ -35,7 +35,7 @@ Just open this [link](https://front-end.djkf6glm8b7z8.amplifyapp.com/) and enjoy
 
 Open the project in Visual Studio Code and run
 
-# OR
+#### OR
 
 As a developper you can explore the front-end by running :
 
