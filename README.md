@@ -31,7 +31,7 @@
 
 ## 🚀 Getting Started <a name = "getting_started"></a>
 
-Just open this [link](google.com) and enjoy the project
+Just open this [link](https://front-end.djkf6glm8b7z8.amplifyapp.com/) and enjoy the project
 
 Open the project in Visual Studio Code and run
 
