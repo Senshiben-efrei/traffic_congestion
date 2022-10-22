@@ -1051,7 +1051,7 @@ function App() {
 
     console.log(requestOptions['body'])
 
-    const response = await fetch('http://trafficcongestion-env-1.eba-cmfgpbfm.eu-west-3.elasticbeanstalk.com/machine_learning', requestOptions);
+    const response = await fetch('https://trafficcongestion-env-1.eba-cmfgpbfm.eu-west-3.elasticbeanstalk.com/machine_learning', requestOptions);
     setDtata(await response.json());
   }
 
