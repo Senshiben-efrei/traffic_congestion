@@ -70,3 +70,7 @@ $RECYCLE.BIN/
 
 #zip files
 *.zip
+
+#add exeption for requirment.txt
+!requirements.txt
+

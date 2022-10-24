@@ -191,6 +191,67 @@ def getDuration(portions, initial_duration):
 # print(portion_results)
     
 
+def getData(hour):
+    url = 'https://drive.google.com/file/d/1se8wg26AtyDNmGUbA767tFpKao73z_IJ/view?usp=sharing'
+
+    if hour == 0:
+        url = 'https://drive.google.com/file/d/1se8wg26AtyDNmGUbA767tFpKao73z_IJ/view?usp=sharing'
+    elif hour == 1:
+        url = 'https://drive.google.com/file/d/11cXZgNFsgNn7jUn2krnih7wzx48Z3xmT/view?usp=sharing'
+    elif hour == 2:
+        url = 'https://drive.google.com/file/d/11lz1wxFDR8-wC_H3Pre-QxsZM1fNXFYX/view?usp=sharing'
+    elif hour == 3:
+        url = 'https://drive.google.com/file/d/1PBPDE39g9k8o2SwIyFhrxdoe5hOeb4OL/view?usp=sharing'
+    elif hour == 4:
+        url = 'https://drive.google.com/file/d/1mrTMktq1HS_fRcZDjAvv9IAcs6OGznE4/view?usp=sharing'
+    elif hour == 5:
+        url = 'https://drive.google.com/file/d/1DJLlx_jc_O4-NvnzurqABjtrzWVO0lCP/view?usp=sharing'
+    elif hour == 6:
+        url = 'https://drive.google.com/file/d/1dGxpzxroI_4pYZtIWjuV6pKOw5jDNVnN/view?usp=sharing'
+    elif hour == 7:
+        url = 'https://drive.google.com/file/d/1aRY09cStM9p21HGXbxYh-7nhJ-AiMlh1/view?usp=sharing'
+    elif hour == 8:
+        url = 'https://drive.google.com/file/d/1q-snoS9B8R8B3nO8qUv-QyGe--k0JehP/view?usp=sharing'
+    elif hour == 9:
+        url = 'https://drive.google.com/file/d/1tm4n-IJpkgV3Q0NyzSaTTjgDZ5rL9iQ2/view?usp=sharing'
+    elif hour == 10:
+        url = 'https://drive.google.com/file/d/1qNTtu1lVgc5cUfqzO-EEwb0kJa2h87-6/view?usp=sharing'
+    elif hour == 11:
+        url = 'https://drive.google.com/file/d/1z_vIcv3fkR0n1RSSHoE4IwXP0SpQCWwq/view?usp=sharing'
+    elif hour == 12:
+        url = 'https://drive.google.com/file/d/1My74Z4CHY-9wYicjz8iUwX6_8jcK8odQ/view?usp=sharing'
+    elif hour == 13:
+        url = 'https://drive.google.com/file/d/1dZbee3EXNJNoXLDZd23CCWXSMtBNrkdo/view?usp=sharing'
+    # ________________________________________________________
+    elif hour == 14:
+        url = 'https://drive.google.com/file/d/1My74Z4CHY-9wYicjz8iUwX6_8jcK8odQ/view?usp=sharing'
+    elif hour == 15:
+        url = 'https://drive.google.com/file/d/1z_vIcv3fkR0n1RSSHoE4IwXP0SpQCWwq/view?usp=sharing'
+    elif hour == 16:
+        url = 'https://drive.google.com/file/d/1qNTtu1lVgc5cUfqzO-EEwb0kJa2h87-6/view?usp=sharing'
+    elif hour == 17:
+        url = 'https://drive.google.com/file/d/1tm4n-IJpkgV3Q0NyzSaTTjgDZ5rL9iQ2/view?usp=sharing'
+    elif hour == 18:
+        url = 'https://drive.google.com/file/d/1q-snoS9B8R8B3nO8qUv-QyGe--k0JehP/view?usp=sharing'
+    elif hour == 19:
+        url = 'https://drive.google.com/file/d/1aRY09cStM9p21HGXbxYh-7nhJ-AiMlh1/view?usp=sharing'
+    elif hour == 20:
+        url = 'https://drive.google.com/file/d/1dGxpzxroI_4pYZtIWjuV6pKOw5jDNVnN/view?usp=sharing'
+    elif hour == 21:
+        url = 'https://drive.google.com/file/d/1DJLlx_jc_O4-NvnzurqABjtrzWVO0lCP/view?usp=sharing'
+    elif hour == 22:
+        url = 'https://drive.google.com/file/d/1mrTMktq1HS_fRcZDjAvv9IAcs6OGznE4/view?usp=sharing'
+    elif hour == 23:
+        url = 'https://drive.google.com/file/d/1PBPDE39g9k8o2SwIyFhrxdoe5hOeb4OL/view?usp=sharing'
+    else:
+        url = 'https://drive.google.com/file/d/1My74Z4CHY-9wYicjz8iUwX6_8jcK8odQ/view?usp=sharing'
+  
+    url = 'https://drive.google.com/uc?export=download&id=' + url.split('/')[-2]
+
+    df = pd.read_csv(url, header=None, names=['date time', 'longitude', 'latitude', 'label'])
+
+    return df, isinstance(df, pd.DataFrame)
+
 
 
 
@@ -198,6 +259,7 @@ def getDuration(portions, initial_duration):
 application = Flask(__name__)
 cors = CORS(application)
 application.config['CORS_HEADERS'] = 'Content-Type'
+
 
 @application.route('/hi')
 def hello_world():
@@ -214,8 +276,10 @@ def index():
     pickup_lon = data['pickup_lon']
     dropoff_lat = data['dropoff_lat']
     dropoff_lon = data['dropoff_lon']
-    hour = 12
-
+    if data['hour'] == 'now':
+        hour = datetime.now().hour
+    else:
+        hour = data['hour']
 
     # hour = str(datetime.now().hour)
 
@@ -245,20 +309,26 @@ def index():
     else:
         #df = pd.read_csv('data/hours/{}Htest.txt'.format(hour), header=None, names=['date time', 'longitude', 'latitude', 'label'])
 
-        df = pd.read_csv('https://drive.google.com/uc?export=download&id='+'https://drive.google.com/file/d/1qcBW7V81AdyQ58kUgwUjiBmjqzcJLN34/view?usp=sharing'.split('/')[-2], header=None, names=['date time', 'longitude', 'latitude', 'label'])
-        points = getPoints((float(pickup_lat), float(pickup_lon)), (float(dropoff_lat), float(dropoff_lon)), df)
+        df, data_status = getData(hour)
+        if(not data_status):
+            return {"message": "Error in getting data"}, 400
+        else:
+            points = getPoints((float(pickup_lat), float(pickup_lon)), (float(dropoff_lat), float(dropoff_lon)), df)
+            portion_results = []
+            for i in range(len(points[2])):
+                portion = getPortions(points[0][i], points[1][i])
+                duration = getDuration(portion['portions'], points[2][i])
+                portion_results.append({
+                    'result': portion,
+                    'duration': points[2][i],
+                    'corrected_duration': duration,
+                    'distance': points[3][i]
+                })
 
-        portion_results = []
-        for i in range(len(points[2])):
-            portion = getPortions(points[0][i], points[1][i])
-            duration = getDuration(portion['portions'], points[2][i])
-            portion_results.append({
-                'result': portion,
-                'duration': points[2][i],
-                'corrected_duration': duration,
-                'distance': points[3][i]
-            })
-        return jsonify(portion_results)
+        return {
+            "message": "Success",
+            "result": portion_results,
+        }
     # 39.90772518863834 116.39751663173872 39.95380284673872 116.46232507838539
 
 if __name__ == '__main__':
