@@ -46,7 +46,10 @@ function App() {
   const [endPoint, setEnd] = useState({lat: 39.868905071098865, lng: 116.43585205078126})
   const [charging, setCharging] = useState(false)
   const [option, setOption] = useState(1)
-  const [data, setDtata] = useState(
+  const [hour, setHour] = useState(12)
+  const [rideNow, setRideNow] = useState(false)
+  const [map, setMap] = useState('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=XUsL1AmkUL4FXM0DB8aZ')
+  const [data, setData] = useState(
     [
       {
         "corrected_duration": 26,
@@ -1048,15 +1051,22 @@ function App() {
       method: 'POST',
       reffrrerPolicy : 'unsafe-url',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pickup_lat : startPoint['lat'], pickup_lon : startPoint['lng'], dropoff_lat  : endPoint['lat'], dropoff_lon  : endPoint['lng'], hour: 12 })
+      body: JSON.stringify({ pickup_lat : startPoint['lat'], pickup_lon : startPoint['lng'], dropoff_lat  : endPoint['lat'], dropoff_lon  : endPoint['lng'], hour: rideNow ? 'now' : hour})
     };
 
     console.log(requestOptions['body'])
     setCharging(true)
-    const response = await fetch('https://geocell.one//machine_learning', requestOptions);
-    setDtata(await response.json());
-    setCharging(false)
-    setOption(0)
+    const response = await fetch('https://geocell.one//machine_learning', requestOptions)
+    const temp = await response.json()
+    if(temp['message'] == 'Success'){
+      setData(temp['result'])
+      setCharging(false)
+      setOption(0)
+    }
+    else{
+      alert(temp['message'])
+      setCharging(false)
+    }
   }
 
 
@@ -1137,9 +1147,11 @@ function App() {
   function changeTheme() {
     if (theme === 'emrald') {
       setTheme('halloween')
+      setMap('https://api.maptiler.com/maps/darkmatter/{z}/{x}/{y}.png?key=XUsL1AmkUL4FXM0DB8aZ')
     } 
     if (theme === 'halloween') {
       setTheme('emrald')
+      setMap('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=XUsL1AmkUL4FXM0DB8aZ')
     }
   }
 
@@ -1159,6 +1171,7 @@ function App() {
             </label>
         </div>
         <div className="navbar-end">
+          <img className="w-4 h-4 rounded-full mr-1 fill-white" src="https://cdn.discordapp.com/attachments/1015252420277846046/1034054106362433637/3601262_1.png" alt="avatar" />
           <input type="checkbox" className="toggle toggle-sm" onChange={changeTheme} />
           <a className="btn btn-ghost btn-circle" href='https://github.com/Senshiben-efrei/traffic_congestion' target='none'>
             <img className="w-8 h-8 rounded-full" src="https://cdn.discordapp.com/attachments/1015252420277846046/1032275501944946699/github-icon_1.png" alt="avatar" />
@@ -1201,12 +1214,12 @@ function App() {
         <div className="drawer-content flex flex-col">
           {/* <!-- Page content here --> */}
 
-          <div className="mockup-window border bg-base-300 w-4/5 h-3/4 self-center mt-9">
+          <div className="mockup-window border bg-base-300 w-4/5 h-4/6 self-center mt-9">
             <div className="flex justify-center bg-base-200">
               <MapContainer center={center} zoom={11} scrollWheelZoom={true} className='rounded-lg'>
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=XUsL1AmkUL4FXM0DB8aZ" //vttps://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png        
+                  url={'https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=XUsL1AmkUL4FXM0DB8aZ'} //vttps://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png        
                   />
 
                 {data[option]['result']['route'] && data[option]['result']['route'].map((point, index) => (
@@ -1222,8 +1235,6 @@ function App() {
                 ))}
 
 
-                <Marker position={startPoint} />
-
                 
                 <Startmarker />
                 <Endmarker />
@@ -1232,25 +1243,27 @@ function App() {
             </div>
           </div>
 
-          <h3 className='mt-4 text-center font-bold px-4 self-center'>Expected duration <nobr className='text-green-500'>{data[option] && Math.floor(data[option]['duration']/60)} min</nobr> but with conjestion <nobr className='text-red-500'>{data[option] && Math.floor(data[option]['corrected_duration'])} min</nobr></h3>
-
-          <button className="btn btn-primary w-28 self-center mt-5 text-white font-bold" onClick={fetchData} >Compute</button>
 
           <div className=' flex flex-row justify-center'>
             
             <div className="form-control w-28 self-center mt-5">
               <label className="label cursor-pointer">
                 <span className="label-text font-bold ml-3">Ride Now!</span> 
-                <input type="checkbox" className="checkbox checkbox-sm" />
+                <input type="checkbox" className="checkbox checkbox-sm" onChange={() => setRideNow(!rideNow)}/>
               </label>
             </div>
 
             <label className="text-gray-500 text-lg font-bold mx-6 self-center mt-5">or</label>
 
-            <input type="number" min="0" max="23" id="visitors" className=" w-11 self-center mt-5 py-3 pl-3 bg-slate-200 rounded-md" placeholder="12" required></input>
+            <input type="number" min="0" max="23" id="visitors" className=" w-11 self-center mt-5 py-3 pl-3 bg-slate-200 rounded-md" placeholder="12" required onChange={e => setHour(e.target.value)}></input>
             <label className="text-gray-500 text-lg font-bold mx-2 self-center mt-5">:</label>
             <input type="number" min="0" max="59" id="visitors" className=" w-11 self-center mt-5 py-3 pl-3 bg-slate-200 rounded-md" placeholder="00" required></input>
           </div>
+
+          <button className="btn btn-primary w-28 self-center mt-3 text-white font-bold" onClick={fetchData} >Compute</button>
+
+          <h3 className='mt-4 text-center font-bold px-4 self-center'>Expected duration <nobr className='text-green-500'>{data[option] && Math.floor(data[option]['duration']/60)} min</nobr> but with congestion <nobr className='text-red-500'>{data[option] && Math.floor(data[option]['corrected_duration'])} min</nobr></h3>
+
                   
         </div> 
 
@@ -1261,20 +1274,22 @@ function App() {
 
             <div className="flex flex-col w-full border-opacity-50">
               <div className="divider">Departure localisation</div>
-              <div className="grid h-20 card bg-base-200 rounded-box place-items-center text-center">{startPoint['lat'] + ' , ' + startPoint['lng']}</div>
+              <div className="grid h-20 card bg-base-200 rounded-box place-items-center text-center">{(startPoint['lat'].toString().slice(0, -7) + ' , ' + startPoint['lng'].toString().slice(0, -7))}</div>
               <div className="divider">Arrival localisation</div>
-              <div className="grid h-20 card bg-base-200 rounded-box place-items-center text-center">{endPoint['lat'] + ' , ' + endPoint['lng']}</div>
-              <div className="divider">Trip time</div>
-              <div className="grid h-20 card bg-base-200 rounded-box place-items-center">XX : XX</div>
+              <div className="grid h-20 card bg-base-200 rounded-box place-items-center text-center">{endPoint['lat'].toString().slice(0, -7) + ' , ' + endPoint['lng'].toString().slice(0, -7)}</div>
               <div className="divider">Options</div>
               <div className="dropdown self-center">
-                <label tabIndex={0} className="btn btn-primary text-white m-1">Option 1 / {data.length}</label>
+                <label tabIndex={0} className="btn btn-primary text-white m-1">Option {option + 1} / {data.length}</label>
                 <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                   {data && data.map((point, index) => (
                     <li key={index}><a onClick={() => setOption(index)}>option {index + 1}</a></li>
                   ))}
                 </ul>
               </div>
+              <div className="divider">Trip time</div>
+              <div className="grid h-20 card bg-base-200 rounded-box place-items-center">{data[option] && ('0' + (Math.floor(data[option]['corrected_duration']/60))).slice(-2)} : {data[option] && ('0' + (Math.floor(data[option]['corrected_duration']%60))).slice(-2)}</div>
+              <div className="divider">Trip distance</div>
+              <div className="grid h-20 card bg-base-200 rounded-box place-items-center">{data[option] && Math.floor(data[option]['distance']/1000)} Km</div>
               
             </div>
 
@@ -1283,7 +1298,7 @@ function App() {
         </div>
       </div>
 
-      <div className={`${charging ? 'visible' : 'invisible'} w-full h-[111%] bg-black absolute top-0 left-0 opacity-80 flex justify-center items-center animate-pulse`}>
+      <div className={`${charging ? 'visible' : 'invisible'} w-full h-[115%] bg-black absolute top-0 left-0 opacity-80 flex justify-center items-center animate-pulse`}>
         <img className="w-28 h-28 rounded-full mr-2 animate-spin" src="https://cdn.discordapp.com/attachments/1015252420277846046/1032275581364084827/github-icon_2.png" alt="avatar" />
       </div>
 
