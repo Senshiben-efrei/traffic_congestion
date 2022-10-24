@@ -142,26 +142,42 @@ def getPortions(df, route):
         'route': basic
     }
     
+def getDistance(start, end):
+    R = 6370
+    lat1 = radians(start['latitude'])
+    lon1 = radians(start['longitude'])
+    lat2 = radians(end['latitude'])
+    lon2 = radians(end['longitude'])
+
+    dlon = lon2 - lon1
+    dlat = lat2- lat1
+
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * arctan2(sqrt(a), sqrt(1-a))
+    distance = R * c
+    return distance
 
 def getDuration(portions, initial_duration):
     # count the number of red, orange, and green portions
     red = 0
     orange = 0
     green = 0
+    total_distance = 0
     for portion in portions:
         if portion['color'] == 'red':
-            red += 1
+            red += getDistance(portion['start'], portion['end'])
+            total_distance += getDistance(portion['start'], portion['end'])
         elif portion['color'] == 'orange':
-            orange += 1
+            orange += getDistance(portion['start'], portion['end'])
+            total_distance += getDistance(portion['start'], portion['end'])
         else:
-            green += 1
-
-    print(red, orange, green)
+            green += getDistance(portion['start'], portion['end'])
+            total_distance += getDistance(portion['start'], portion['end'])
 
     # calculate the duration
-    duration = initial_duration * (1.5*red + 1.25*orange)
-
-
+    duration = initial_duration * (1*green + 2*red + 1.75*orange)/total_distance
+    #convert to minutes
+    duration = round(duration / 60)
     return duration
 
 # df = pd.read_csv('https://drive.google.com/uc?export=download&id='+'https://drive.google.com/file/d/1qcBW7V81AdyQ58kUgwUjiBmjqzcJLN34/view?usp=sharing'.split('/')[-2], header=None, names=['date time', 'longitude', 'latitude', 'label'])
@@ -179,11 +195,11 @@ def getDuration(portions, initial_duration):
 
 
 
-app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
+application = Flask(__name__)
+cors = CORS(application)
+application.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route('/')
+@application.route('/hi')
 def hello_world():
    return {
          "message": "Hello World"
@@ -191,8 +207,8 @@ def hello_world():
 
 # request example :
 # http://127.0.0.1:5000/machine_learning?pickup_lat=39.90772518863834&pickup_lon=116.39751663173872&dropoff_lat=39.95380284673872&dropoff_lon=116.46232507838539
-@app.route('/machine_learning', methods = ['POST'])
-def machine_learning():
+@application.route('/machine_learning', methods = ['POST'])
+def index():
     data = request.get_json()
     pickup_lat = data['pickup_lat']
     pickup_lon = data['pickup_lon']
@@ -246,4 +262,4 @@ def machine_learning():
     # 39.90772518863834 116.39751663173872 39.95380284673872 116.46232507838539
 
 if __name__ == '__main__':
-    app.run(threaded=True, host='127.0.0.1', port=5000)
+    application.run()
